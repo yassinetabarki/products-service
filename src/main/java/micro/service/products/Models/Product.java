@@ -23,6 +23,7 @@ public class Product {
             strategy = GenerationType.UUID,
             generator = "products"
     )
+
     private Long id;
     private String name;
     private String description;
