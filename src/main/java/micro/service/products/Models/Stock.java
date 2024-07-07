@@ -22,6 +22,7 @@ public class Stock {
             generator = "stock"
     )
     private Long id;
+
     private Integer quantity;
 
 }

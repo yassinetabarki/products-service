@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import micro.service.products.Mappers.ProductMapper;
 import micro.service.products.Models.Product;
 import micro.service.products.Repositories.ProductRepository;
+import micro.service.products.Specifications.ProductSpecifications;
 import micro.service.products.TDOs.ProductDTO;
 import micro.service.products.exceptions.ResourceNotFoundException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -18,8 +20,9 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository repository;
 
-    public List<ProductDTO> getProducts() {
-        return repository.findAll()
+    public List<ProductDTO> getProducts(ProductDTO productDTO) {
+        Specification<Product> spec = new ProductSpecifications(productDTO);
+        return repository.findAll(spec)
                 .stream()
                 .map(ProductMapper.INSTANCE::toDTO)
                 .toList();

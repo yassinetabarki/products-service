@@ -5,34 +5,47 @@ import jakarta.persistence.*;
 import lombok.*;
 import micro.service.products.Enums.Status;
 
+import java.util.List;
+
 @Entity
-@Table(name = "products")
+@Table(name = "categories")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+
+public class Category {
     @Id
     @SequenceGenerator(
-            name = "products",
-            sequenceName = "product_sequence",
+            name = "categories",
+            sequenceName = "categories_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.UUID,
-            generator = "products"
+            generator = "categories"
     )
     private Long id;
+
     private String name;
+
     private String description;
+
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
-    private Integer stock;
-    private Double price;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+
+    @OneToMany(mappedBy = "category")
     @JsonIgnore
-    private Category category;
+    private List<Product> products;
+
+    @Transient
+    private Integer productNumber;
+
+    public Integer getProductNumber() {
+        return this.products == null ? 0 : this.products.size();
+    }
+
+
 }
